@@ -11,7 +11,7 @@
    <children>
       <ImageView layoutX="121.0" layoutY="252.0">
          <image>
-            <Image url="@../../../../../image/logo.png" />
+            <Image url="@image/logo.png" />
          </image>
       </ImageView>
       <Text blendMode="DARKEN" cache="true" layoutX="85.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="잊어버린 작품을 찾아드립니다">

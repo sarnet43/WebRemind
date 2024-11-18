@@ -1,0 +1,45 @@
+/* 배경색 */
+.root {
+    -fx-background-color: #FFFFFF;
+}
+
+/* 텍스트 필드 */
+.text-field, .password-field {
+    -fx-font-size: 14px;
+    -fx-background-color: #DADADA;
+    -fx-text-fill: #5E5E5E;
+    -fx-prompt-text-fill: #919191;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+
+/* 버튼 스타일 */
+.button {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+#loginButton {
+    -fx-background-color: #4F735C;
+    -fx-text-fill: #FFFFFF;
+}
+
+#signupButton {
+    -fx-background-color: #D3D3D3;
+    -fx-text-fill: #5E5E5E;
+}
+
+/* 버튼 클릭 시 효과 */
+.button:pressed {
+    -fx-opacity: 0.8;
+}
+
+/* 로고 */
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+}
