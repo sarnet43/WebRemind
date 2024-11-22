@@ -1,0 +1,20 @@
+/* 알림 제목 스타일 */
+.t {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000; /*검정색*/
+}
+
+/* 알림 박스 스타일 */
+.n {
+    -fx-padding: 10;
+    -fx-font-size: 12px;
+    -fx-text-fill: #000000; /* 검정색 */
+    -fx-background-color: #FFFFFF; /* 하얀 배경색 */
+    -fx-border-color: rgba(94, 94, 94, 0.3); /* 30% 불투명 테두리 */
+    -fx-border-radius: 5;
+}
+
+.Button{
+    -fx-background-color: #FFFFFF
+}
