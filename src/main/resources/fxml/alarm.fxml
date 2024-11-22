@@ -34,12 +34,9 @@
         </HBox>
 
         <VBox layoutY="119.0" prefHeight="531.0" prefWidth="360.0" spacing="10">
-            <ListView prefHeight="650" prefWidth="360">
-                <Label prefHeight="50.0" prefWidth="341.0" styleClass="n" text="guest님께서 댓글을 다셨습니다.&#10;커뮤니티 - 이 웹툰 아시는 분.." />
-                <Label prefHeight="53.0" prefWidth="341.0" styleClass="n" text="guest님께서 댓글을 다셨습니다.&#10;커뮤니티 - 이 웹툰 아시는 분.." />
-            </ListView>
+            <ListView fx:id="notificationList" prefHeight="650" prefWidth="360"/>
         </VBox>
-        <Label layoutX="14.0" layoutY="66.0" styleClass="t" text="알림" />
 
+        <Label layoutX="14.0" layoutY="66.0" styleClass="t" text="알림" />
     </children>
 </AnchorPane>
