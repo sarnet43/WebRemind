@@ -24,14 +24,14 @@
     -fx-cursor: hand;
 }
 
-#loginButton {
+.loginButton {
     -fx-background-color: #4F735C;
     -fx-text-fill: #FFFFFF;
 }
 
-#signupButton {
+.signupButton {
     -fx-background-color: #D3D3D3;
-    -fx-text-fill: #5E5E5E;
+    -fx-text-fill: #4F735C;
 }
 
 /* 버튼 클릭 시 효과 */
