@@ -12,6 +12,7 @@ public class LoingController {
 
     @FXML
     private javafx.scene.control.Button btn_sing;
+    private javafx.scene.control.Button btn_login;
 
     @FXML
     private void onSignupButtonClick() {
@@ -22,6 +23,23 @@ public class LoingController {
 
             // 현재 Stage 가져오기
             Stage stage = (Stage) btn_sing.getScene().getWindow();
+
+            // 회원가입 화면으로 Scene 교체
+            Scene signupScene = new Scene(signupScreen);
+            stage.setScene(signupScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onLoginButtonClick(){
+        try {
+            // 회원가입 화면 로드
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/"));
+            Parent signupScreen = loader.load();
+
+            // 현재 Stage 가져오기
+            Stage stage = (Stage) btn_login.getScene().getWindow();
 
             // 회원가입 화면으로 Scene 교체
             Scene signupScene = new Scene(signupScreen);
