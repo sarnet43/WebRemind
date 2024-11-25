@@ -5,23 +5,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/singup.css" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/singup.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text layoutX="37.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="닉네임" />
-      <TextField layoutX="34.0" layoutY="265.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" />
+      <Text layoutX="37.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="닉네임" />
+      <TextField layoutX="34.0" layoutY="216.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" />
 
-      <Text layoutX="37.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="아이디" />
-      <TextField layoutX="34.0" layoutY="329.0" prefHeight="31.0" prefWidth="292.0" promptText="아이디" />
+      <Text layoutX="37.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="아이디" />
+      <TextField layoutX="34.0" layoutY="280.0" prefHeight="31.0" prefWidth="292.0" promptText="아이디" />
 
-      <Text layoutX="37.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호" />
-      <TextField layoutX="34.0" layoutY="393.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호" />
+      <Text layoutX="37.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호" />
+      <TextField layoutX="34.0" layoutY="344.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호" />
 
-      <Text layoutX="37.0" layoutY="456.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호 확인" />
-      <TextField layoutX="34.0" layoutY="465.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호 확인" />
+      <Text layoutX="37.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호 확인" />
+      <TextField layoutX="34.0" layoutY="416.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호 확인" />
 
-      <Button layoutX="34.0" layoutY="556.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="292.0" text="다음" styleClass="nextbtn"/>
+      <Button layoutX="34.0" layoutY="507.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="292.0" styleClass="nextbtn" text="다음" />
 
-      <ImageView fitHeight="40.0" fitWidth="57.0" layoutX="156.0" layoutY="158.0">
+      <ImageView fitHeight="40.0" fitWidth="57.0" layoutX="152.0" layoutY="106.0">
          <image>
             <Image url="@../image/logo.png" />
          </image>
