@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/singup.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/singup.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.SingupController">
    <children>
       <Text layoutX="37.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="닉네임" />
       <TextField layoutX="34.0" layoutY="216.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" />
