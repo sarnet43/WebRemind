@@ -25,7 +25,7 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            // 3초 대기 후 로그인 화면으로 전환
+            // 1초 대기 후 로그인 화면으로 전환
             PauseTransition delay = new PauseTransition(Duration.seconds(1));
             delay.setOnFinished(event -> {
 
