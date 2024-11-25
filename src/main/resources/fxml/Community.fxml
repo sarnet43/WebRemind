@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/alarm.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+
+    <fx:define>
+        <Image fx:id="Alarm" url="@../image/alarm.png" />
+        <Image fx:id="Home" url="@../image/home.png" />
+        <Image fx:id="Mypage" url="@../image/mypage.png" />
+        <Image fx:id="Add" url="@../image/add.png" />
+    </fx:define>
+
+    <children>
+        <HBox alignment="CENTER" layoutY="590.0" prefHeight="66.0" prefWidth="360.0" spacing="50.0">
+            <children>
+                <Button>
+                    <graphic>
+                        <ImageView image="$Alarm"/>
+                    </graphic>
+                </Button>
+                <Button>
+                    <graphic>
+                        <ImageView image="$Home"/>
+                    </graphic>
+                </Button>
+                <Button>
+                    <graphic>
+                        <ImageView image="$Mypage"/>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+
+        <Button layoutX="299.0" layoutY="530.0">
+            <graphic>
+                <ImageView image="$Add"/>
+            </graphic>
+        </Button>
+
+        <VBox layoutY="67.0" prefHeight="449.0" prefWidth="360.0" spacing="10">
+            <children>
+                <ListView fx:id="notificationList" prefHeight="600.0" prefWidth="360.0" />
+            </children>
+        </VBox>
+      <ImageView fitHeight="45.0" fitWidth="76.0" layoutX="14.0" layoutY="14.0">
+         <image>
+            <Image url="@../image/Commulogo.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>
