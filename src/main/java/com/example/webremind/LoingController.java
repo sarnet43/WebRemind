@@ -12,6 +12,7 @@ public class LoingController {
 
     @FXML
     private javafx.scene.control.Button btn_sing;           //회원가입 버튼 id
+
     @FXML
     private javafx.scene.control.Button btn_login;          //로그인 버튼 id
 

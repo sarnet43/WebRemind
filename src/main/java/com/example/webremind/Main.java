@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // FXML 파일 로드
-            FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/fxml/startscreen.fxml"));
+            FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/fxml/Startscreen.fxml"));
             Parent root = startLoader.load();
 
             // Scene 생성 및 Stage 설정
