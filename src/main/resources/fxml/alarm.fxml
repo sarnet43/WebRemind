@@ -7,9 +7,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+
 <?import javafx.scene.image.Image?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/alarm.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/alarm.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.AlarmController">
 
     <fx:define>
         <Image fx:id="Alarm" url="@../image/alarm.png" />
@@ -18,19 +19,21 @@
     </fx:define>
 
     <children>
-        <HBox alignment="CENTER" layoutY="599.0" prefHeight="66.0" prefWidth="360.0" spacing="50.0">
+        <HBox alignment="CENTER" layoutY="587.0" prefHeight="77.0" prefWidth="360.0" spacing="50.0">
             <children>
-                <Button>
+                <Button fx:id="btn_alarm" onAction="#onalarm_alButtonClick">
                     <graphic>
                         <ImageView image="$Alarm"/>
                     </graphic>
                 </Button>
-                <Button>
+
+                <Button fx:id="btn_home" onAction="#onhome_alButtonClick">
                     <graphic>
                         <ImageView image="$Home"/>
                     </graphic>
                 </Button>
-                <Button>
+
+                <Button fx:id="btn_mypage" onAction="#onmypage_alButtonClick">
                     <graphic>
                         <ImageView image="$Mypage"/>
                     </graphic>
@@ -38,9 +41,9 @@
             </children>
         </HBox>
 
-        <VBox layoutY="67.0" prefHeight="531.0" prefWidth="360.0" spacing="10">
+        <VBox layoutY="67.0" prefHeight="521.0" prefWidth="360.0" spacing="10">
             <children>
-                <ListView fx:id="notificationList" prefHeight="600.0" prefWidth="360.0" />
+                <ListView fx:id="notificationList" prefHeight="552.0" prefWidth="360.0" />
             </children>
         </VBox>
 
