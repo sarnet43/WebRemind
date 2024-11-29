@@ -5,7 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/singup.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.SingupController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="665.0" prefWidth="360.0" stylesheets="@../css/singup.css" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.SingupController">
+
    <children>
       <Text layoutX="37.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="닉네임" />
       <TextField layoutX="34.0" layoutY="216.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" />
@@ -19,7 +22,8 @@
       <Text layoutX="37.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호 확인" />
       <TextField layoutX="34.0" layoutY="416.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호 확인" />
 
-      <Button layoutX="34.0" layoutY="507.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="292.0" styleClass="nextbtn" text="다음" />
+      <Button fx:id="btn_next" layoutX="34.0" layoutY="507.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="292.0"
+              onAction="#onnextButtonClick" styleClass="nextbtn" text="다음" />
 
       <ImageView fitHeight="40.0" fitWidth="57.0" layoutX="152.0" layoutY="106.0">
          <image>
