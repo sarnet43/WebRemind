@@ -16,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // FXML 파일 로드
-            FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/fxml/Startscreen.fxml"));
+            FXMLLoader startLoader = new FXMLLoader(getClass().getResource("/fxml/startscreen.fxml"));
             Parent root = startLoader.load();
 
             // Scene 생성 및 Stage 설정
@@ -25,8 +25,8 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            // 2초 대기 후 로그인 화면으로 전환
-            PauseTransition delay = new PauseTransition(Duration.seconds(2));
+            // 3초 대기 후 로그인 화면으로 전환
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
             delay.setOnFinished(event -> {
 
                 try {
