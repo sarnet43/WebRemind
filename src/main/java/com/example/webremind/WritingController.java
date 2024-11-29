@@ -20,7 +20,7 @@ public class WritingController {
     @FXML
     private void onsave_wrButtonClick() {            //저장 버튼을 클릭 시 호출되는 메서드
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
             Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기

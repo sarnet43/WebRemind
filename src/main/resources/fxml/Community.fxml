@@ -4,9 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" styleClass="community.css"
-            fx:controller="com.example.webremind.CommunityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" styleClass="community.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.CommunityController">
 
     <fx:define>
         <Image fx:id="Alarm" url="@../image/alarm.png" />
@@ -38,7 +36,7 @@
             </children>
         </HBox>
 
-        <Button fx:id="btn_add" onAction="#onadd_comButtonClick" layoutX="287.0" layoutY="523.0" mnemonicParsing="false">
+        <Button fx:id="btn_add" layoutX="287.0" layoutY="523.0" mnemonicParsing="false" onAction="#onadd_comButtonClick">
             <graphic>
                 <ImageView image="$Add"/>
             </graphic>
@@ -50,9 +48,9 @@
          </children>
       </VBox>
 
-      <ImageView layoutX="14.0" layoutY="14.0">
+      <ImageView fitHeight="38.0" fitWidth="56.0" layoutX="14.0" layoutY="18.0">
          <image>
-            <Image url="@../image/Commulogo.png" />
+            <Image url="@../image/logo.png" />
          </image>
       </ImageView>
 
