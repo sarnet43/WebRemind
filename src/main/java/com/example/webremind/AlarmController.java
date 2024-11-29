@@ -23,7 +23,7 @@ public class AlarmController {
     private void onalarm_alButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
         try {
             // 알림 화면 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/alarm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
             Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기

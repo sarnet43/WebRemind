@@ -31,7 +31,7 @@ public class Main extends Application {
 
                 try {
                     // 로그인 화면 로드
-                    FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+                    FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
                     Parent loginScreen = loginLoader.load();
                     Scene loginScene = new Scene(loginScreen);
 

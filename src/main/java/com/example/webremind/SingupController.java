@@ -11,7 +11,7 @@ import java.io.IOException;
 public class SingupController {
 
     @FXML
-    private javafx.scene.control.Button btn_next;          //로그인 버튼 id
+    private javafx.scene.control.Button btn_next;          //다음 버튼 id
 
     @FXML
     private void onnextButtonClick() {            //다음 버튼을 클릭 시 호출되는 메서드
