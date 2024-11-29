@@ -11,16 +11,16 @@
 
    <children>
       <Text layoutX="37.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="닉네임" />
-      <TextField layoutX="34.0" layoutY="216.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" />
+      <TextField layoutX="34.0" layoutY="216.0" prefHeight="31.0" prefWidth="292.0" promptText="닉네임" fx:id="username"/>
 
       <Text layoutX="37.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="아이디" />
-      <TextField layoutX="34.0" layoutY="280.0" prefHeight="31.0" prefWidth="292.0" promptText="아이디" />
+      <TextField layoutX="34.0" layoutY="280.0" prefHeight="31.0" prefWidth="292.0" promptText="아이디" fx:id="userid"/>
 
       <Text layoutX="37.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호" />
-      <TextField layoutX="34.0" layoutY="344.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호" />
+      <PasswordField layoutX="34.0" layoutY="344.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호" fx:id="passwd"/>
 
       <Text layoutX="37.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="비밀번호 확인" />
-      <TextField layoutX="34.0" layoutY="416.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호 확인" />
+      <PasswordField layoutX="34.0" layoutY="416.0" prefHeight="31.0" prefWidth="292.0" promptText="비밀번호 확인" fx:id="checkPasswd"/>
 
       <Button fx:id="btn_next" layoutX="34.0" layoutY="507.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="292.0"
               onAction="#onnextButtonClick" styleClass="nextbtn" text="다음" />
