@@ -1,9 +1,11 @@
 package com.example.webremind;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +23,9 @@ public class CommunityController {
 
     @FXML
     private  javafx.scene.control.Button btn_add;           //글쓰는 버튼 id
+
+    @FXML
+    private ListView<String> listView;
 
     @FXML
     private void onalarm_comButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
@@ -96,6 +101,13 @@ public class CommunityController {
         } catch (IOException e) {                           // IOException 발생 시 예외 처리
             e.printStackTrace();                            // 에러 메시지를 출력
         }
+    }
+
+    // 화면 초기화 시 호출되는 메서드
+    public void initialize() {
+        // DataStore에서 게시글 리스트를 가져와 ListView에 연결
+        ObservableList<String> posts = DataStore.getPosts();
+        listView.setItems(posts); // ListView와 ObservableList를 동기화
     }
 
 }

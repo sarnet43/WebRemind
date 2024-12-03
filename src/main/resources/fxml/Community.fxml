@@ -3,8 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" styleClass="community.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.CommunityController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0"
+            styleClass="community.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.webremind.CommunityController">
 
     <fx:define>
         <Image fx:id="Alarm" url="@../image/alarm.png" />
@@ -44,7 +47,7 @@
 
       <VBox layoutY="71.0" prefHeight="445.0" prefWidth="360.0">
          <children>
-            <ListView prefHeight="448.0" prefWidth="360.0" />
+            <ListView fx:id="listView" prefHeight="448.0" prefWidth="360.0" styleClass="font-listview" />
          </children>
       </VBox>
 
