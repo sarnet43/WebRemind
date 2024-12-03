@@ -4,7 +4,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,45 +15,62 @@ import java.io.IOException;
 public class WritingController {
 
     @FXML
-    private javafx.scene.control.Button btn_save;          //홈 버튼 id
+    private TextField titleField; // 제목 입력 필드
 
     @FXML
-    private javafx.scene.control.Button btn_back;          //마이페이지 버튼 id
+    private TextArea contentArea; // 내용 입력 필드
 
     @FXML
-    private void onsave_wrButtonClick() {            //저장 버튼을 클릭 시 호출되는 메서드
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+    private Button btn_save; // 저장 버튼
 
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_save.getScene().getWindow();
+    @FXML
+    private Button btn_back; // 뒤로 가기 버튼
 
-            // 저장 화면으로 Scene 교체
-            Scene alarmScene = new Scene(alarmScreen);
-            stage.setScene(alarmScene);
-            // 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
+    @FXML
+    private void onsave_wrButtonClick() {
+        String title = titleField.getText().trim(); // 제목을 가져옴
+        String content = contentArea.getText().trim(); // 내용을 가져옴
+
+        // 제목과 내용이 모두 비어있을 경우 경고 표시
+        if (title.isEmpty() || content.isEmpty()) {
+            showAlert("오류", "제목과 내용은 반드시 입력해야 합니다.");
+            return;
         }
+
+        // 게시글 저장 (실제 저장 로직으로 교체 가능)
+        String post = title.isEmpty() ? content : title + " - " + content;
+        DataStore.addPost(post);  // 가상의 데이터 저장 메서드 호출
+        System.out.println("저장된 게시글: " + post);
+
+        // 커뮤니티 화면으로 전환
+        switchToScene("/fxml/Community.fxml");
     }
 
     @FXML
-    private void onback_wrButtonClick() {            //뒤로 가기 버튼을 클릭 시 호출되는 메서드
+    private void onback_wrButtonClick() {
+        switchToScene("/fxml/Community.fxml"); // 뒤로 가기 버튼 클릭 시 커뮤니티 화면으로 전환
+    }
+
+    // 화면 전환 메서드
+    private void switchToScene(String fxmlFile) {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent screen = loader.load();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_back.getScene().getWindow();
-
-
-            Scene alarmScene = new Scene(alarmScreen);
-            stage.setScene(alarmScene);
-            // 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
+            Stage stage = (Stage) btn_save.getScene().getWindow();
+            stage.setScene(new Scene(screen));
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("오류", "화면을 불러올 수 없습니다: " + fxmlFile);
         }
+    }
+
+    // 경고창 표시 메서드
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
