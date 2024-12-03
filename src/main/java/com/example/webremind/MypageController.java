@@ -27,6 +27,14 @@ public class MypageController {
     private static final String DEFAULT_IMAGE_PATH = "/image/default image.jpg";
 
     @FXML
+    public void initialize() {
+        // 기본 이미지로 설정
+        Image defaultImage = new Image(getClass().getResource(DEFAULT_IMAGE_PATH).toString());
+        userimage.setImage(defaultImage);
+    }
+
+
+    @FXML
     private void onalarm_myButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
         try {
             // 알림 화면 로드
@@ -90,9 +98,7 @@ public class MypageController {
         // FileChooser 생성
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("이미지 선택");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("이미지 파일", "*.png", "*.jpg", "*.jpeg")
-        );
+        fileChooser.getExtensionFilters().addAll( new FileChooser.ExtensionFilter("이미지 파일", "*.png", "*.jpg", "*.jpeg"));
 
         // 파일 탐색기 열기
         File selectedFile = fileChooser.showOpenDialog(userimage.getScene().getWindow());
