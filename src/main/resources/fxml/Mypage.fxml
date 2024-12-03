@@ -54,12 +54,7 @@
                 <Font size="18.0" />
             </font>
         </Text>
-      <Text fx:id="usernameText" layoutX="50.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
+      <Text fx:id="usernameText" layoutX="50.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text=""
             textOrigin="CENTER" wrappingWidth="259.10931396484375" />
-      <Button fx:id="btn_namechange" layoutX="257.0" layoutY="401.0" mnemonicParsing="false" onAction="#onnamechange_myButtonClick">
-         <graphic>
-            <ImageView image="$Name" />
-         </graphic>
-      </Button>
     </children>
 </AnchorPane>

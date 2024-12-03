@@ -102,33 +102,6 @@ public class MypageController {
     }
 
     @FXML
-    private void onnamechange_myButtonClick(){
-        // 현재 닉네임 텍스트를 TextField로 변경
-        String currentUsername = usernameText.getText();
-        TextField usernameField = new TextField(currentUsername);
-        usernameField.setLayoutX(usernameText.getLayoutX());
-        usernameField.setLayoutY(usernameText.getLayoutY());
-
-        // 닉네임 변경 버튼을 TextField가 있는 곳에 배치
-        btn_namechange.setLayoutX(usernameField.getLayoutX() + usernameField.getWidth() + 10);
-        btn_namechange.setText("변경");
-
-        // 닉네임 변경 후 TextField 사라지기
-        usernameField.setOnAction(event -> {
-            String newUsername = usernameField.getText().trim();
-            if (!newUsername.isEmpty()) {
-                // 닉네임을 DataStore에 저장
-                DataStore.getUserDataInstance().setUsername(newUsername);
-                usernameText.setText(newUsername);
-                usernameField.setVisible(false); // TextField 숨기기
-            }
-        });
-
-        // 화면에 TextField 추가
-        usernameText.getScene().getRoot().getChildrenUnmodifiable().add(usernameField);
-    }
-
-    @FXML
     private void userimageChangeButtonClick() {
         // FileChooser 생성
         FileChooser fileChooser = new FileChooser();
