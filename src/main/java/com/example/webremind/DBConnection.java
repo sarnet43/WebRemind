@@ -2,7 +2,7 @@ package com.example.webremind;
 
 import java.sql.*;
 
-class DBConnectionEx {
+class DBConnection {
     public static Connection getConnection() {
         Connection conn = null;
         String username = "root"; // DB접속시 아이디
