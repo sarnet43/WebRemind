@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class CommunityController {
     private javafx.scene.control.Button btn_mypage;          //마이페이지 버튼 id
 
     @FXML
-    private  javafx.scene.control.Button btn_add;           //글쓰는 버튼 id
+    private javafx.scene.control.Button btn_add;           //글쓰는 버튼 id
 
     @FXML
     private ListView<String> listView;
@@ -110,4 +111,22 @@ public class CommunityController {
         listView.setItems(posts); // ListView와 ObservableList를 동기화
     }
 
+    // 화면 전환 메서드
+    private void switchToScene(String fxmlFile, String postContent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent screen = loader.load();
+
+            // PostcontentController에 데이터 전달
+            if (postContent != null) {
+                PostcontentController controller = loader.getController();
+                controller.setPostContent(postContent);
+            }
+
+            Stage stage = (Stage) btn_home.getScene().getWindow();
+            stage.setScene(new Scene(screen));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
