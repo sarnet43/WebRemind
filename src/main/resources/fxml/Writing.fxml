@@ -18,6 +18,7 @@
       </Button>
       <TextArea fx:id="contentArea" layoutX="27.0" layoutY="158.0" prefHeight="491.0" prefWidth="307.0"
                 wrapText="true" promptText="내용을 입력해주세요" />
+
       <TextField fx:id="titleField" layoutX="27.0" layoutY="97.0" prefHeight="43.0" prefWidth="307.0" promptText="제목 없음">
          <font>
             <Font name="System" size="18.0" />

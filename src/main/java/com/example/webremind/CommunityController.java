@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,16 +20,16 @@ import java.sql.SQLException;
 public class CommunityController {
 
     @FXML
-    private javafx.scene.control.Button btn_alarm;           // 알림 버튼 id
+    private javafx.scene.control.Button btn_alarm;           //알림 버튼 id
 
     @FXML
-    private javafx.scene.control.Button btn_home;            // 홈 버튼 id
+    private javafx.scene.control.Button btn_home;          //홈 버튼 id
 
     @FXML
-    private javafx.scene.control.Button btn_mypage;          // 마이페이지 버튼 id
+    private javafx.scene.control.Button btn_mypage;          //마이페이지 버튼 id
 
     @FXML
-    private javafx.scene.control.Button btn_add;             // 글쓰는 버튼 id
+    private  javafx.scene.control.Button btn_add;           //글쓰는 버튼 id
 
     @FXML
     private ListView<String> listView;
@@ -77,7 +78,7 @@ public class CommunityController {
 
     // 알림 버튼 클릭 시 호출되는 메서드
     @FXML
-    private void onalarm_comButtonClick() {
+    private void onalarm_comButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
         try {
             // 알림 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
@@ -89,52 +90,52 @@ public class CommunityController {
             // 알림 화면으로 Scene 교체
             Scene alarmScene = new Scene(alarmScreen);
             stage.setScene(alarmScene);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
+        } catch (IOException e) {                           // IOException 발생 시 예외 처리
+            e.printStackTrace();                            // 에러 메시지를 출력
         }
     }
 
-    // 홈 버튼 클릭 시 호출되는 메서드
     @FXML
-    private void onhome_comButtonClick() {
+    private void onhome_comButtonClick() {            //홈 버튼을 클릭 시 호출되는 메서드
         try {
             // 홈 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
             Parent homeScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_home.getScene().getWindow();
+            Stage stage = (Stage) btn_home.getScene().getWindow();      //홈 버튼을 누를 시 새로운 스테이지 생성
 
             // 홈 화면으로 Scene 교체
             Scene homeScene = new Scene(homeScreen);
             stage.setScene(homeScene);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // 홈 화면을 새로운 Scene으로 생성하고 Stage에 설정
+        } catch (IOException e) {                           // IOException 발생 시 예외 처리
+            e.printStackTrace();                            // 에러 메시지를 출력
         }
     }
 
-    // 마이페이지 버튼 클릭 시 호출되는 메서드
     @FXML
-    private void onmypage_comButtonClick() {
+    private void onmypage_comButtonClick() {            //마이페이지 버튼을 클릭 시 호출되는 메서드
         try {
             // 마이페이지 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
-            Parent mypageScreen = loader.load();
+            Parent mypageScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_mypage.getScene().getWindow();
+            Stage stage = (Stage) btn_mypage.getScene().getWindow();      //마이페이지 버튼을 누를 시 새로운 스테이지 생성
 
             // 마이페이지 화면으로 Scene 교체
             Scene mypageScene = new Scene(mypageScreen);
             stage.setScene(mypageScene);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // 마이페이지 화면을 새로운 Scene으로 생성하고 Stage에 설정
+        } catch (IOException e) {                           // IOException 발생 시 예외 처리
+            e.printStackTrace();                            // 에러 메시지를 출력
         }
     }
 
-    // 글쓰기 버튼 클릭 시 호출되는 메서드
     @FXML
-    private void onadd_comButtonClick() {
+    private void onadd_comButtonClick() {            //글쓰기 버튼을 클릭 시 호출되는 메서드
         try {
             // 글쓰기 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Writing.fxml"));
@@ -160,5 +161,43 @@ public class CommunityController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    // 화면 초기화 시 호출되는 메서드
+    public void initialize() {
+        // DataStore에서 게시글 리스트를 가져와 ListView에 연결
+        ObservableList<String> posts = DataStore.getPosts();
+        listView.setItems(posts); // ListView와 ObservableList를 동기화
+
+        // 더블 클릭 이벤트 추가
+        listView.setOnMouseClicked(this::onListViewItemDoubleClick);
+    }
+
+    // ListView 아이템 더블 클릭 처리
+    private void onListViewItemDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // 더블 클릭 감지
+            String selectedPost = listView.getSelectionModel().getSelectedItem();
+            if (selectedPost != null) {
+                // Postcontent.fxml로 이동하며 데이터 전달
+                switchToScene("/fxml/Postcontent.fxml", selectedPost);
+            }
+        }
+    }
+
+    // 화면 전환 메서드
+    private void switchToScene(String fxmlFile, String postContent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            Parent screen = loader.load();
+
+            // PostcontentController에 데이터 전달
+            if (postContent != null) {
+                PostcontentController controller = loader.getController();
+                controller.setPostContent(postContent);
+            }
+
+            Stage stage = (Stage) btn_home.getScene().getWindow();
+            stage.setScene(new Scene(screen));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
