@@ -26,11 +26,6 @@ public class Main extends Application {
             primaryStage.setScene(scene);
 
             //아이콘 설정
-            Image icon = new Image(getClass().getResourceAsStream("/resources/image/logo.png"));
-            primaryStage.getIcons().add(icon);
-
-
-            // 아이콘 설정
             Image icon = new Image(getClass().getResourceAsStream("/image/logo.png"));
             primaryStage.getIcons().add(icon);
 
