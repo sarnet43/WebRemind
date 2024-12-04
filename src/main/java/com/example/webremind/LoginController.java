@@ -59,32 +59,60 @@ public class LoginController {
 
     @FXML
     private void onLoginButtonClick() {
-        String user_id = userid.getText().trim(); // 입력된 사용자 ID
-        String user_password = password.getText().trim(); // 입력된 비밀번호
+        String user_id = userid.getText().trim();
+        String user_password = password.getText().trim();
 
-        // 필드가 비어 있으면 경고 표시
         if (user_id.isEmpty() || user_password.isEmpty()) {
             showAlert("오류", "모두 입력하였는지 확인하세요.");
             return;
         }
 
-        // 사용자 인증
+        // LoginController.java
         if (authenticateUser(user_id, user_password)) {
-            try {
-                // 로그인 성공 시 Community 화면 로드
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-                Parent loginScreen = loader.load();
+            String userName = fetchUserName(user_id); // 사용자 이름 가져오기
+            if (userName != null) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
+                    Parent communityScreen = loader.load();
 
-                Stage stage = (Stage) btn_login.getScene().getWindow();
-                Scene loginScene = new Scene(loginScreen);
-                stage.setScene(loginScene);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    // CommunityController에 사용자 이름 전달
+                    CommunityController communityController = loader.getController();
+                    communityController.setLoggedInUserName(userName);
+
+                    // 현재 Stage 가져오기
+                    Stage stage = (Stage) btn_login.getScene().getWindow();
+                    stage.setScene(new Scene(communityScreen));  // 커뮤니티 화면으로 전환
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                showAlert("오류", "사용자 정보를 가져오는 데 실패했습니다.");
             }
         } else {
-            // 로그인 실패 시 경고 표시
             showAlert("로그인 실패", "아이디 또는 비밀번호가 잘못되었습니다.");
         }
+
+    }
+
+    private String fetchUserName(String userId) {
+        String query = "SELECT username FROM users WHERE userid = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, userId); // 전달받은 userId로 검색
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String userName = rs.getString("username");
+                System.out.println("DB에서 조회된 사용자 이름: " + userName); // 디버깅용
+                return userName;
+            } else {
+                System.out.println("DB에서 사용자 이름을 찾지 못했습니다."); // 디버깅용
+            }
+        } catch (SQLException e) {
+            System.out.println("SQL 오류: " + e.getMessage());
+        }
+        return null; // 사용자를 찾지 못한 경우 null 반환
     }
 
     private boolean authenticateUser(String userId, String userPassword) {
