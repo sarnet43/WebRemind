@@ -51,7 +51,7 @@ public class CommunityController {
     // MySQL에서 게시글 제목만 가져와 ListView에 표시
     private ObservableList<String> fetchPostsFromDatabase() {
         ObservableList<String> posts = FXCollections.observableArrayList(); // ObservableList 생성
-        String query = "SELECT title FROM posts ORDER BY id DESC"; // 게시글 제목만 가져오는 SQL 쿼리
+        String query = "SELECT title, post_date, user_name FROM posts ORDER BY id DESC"; // 게시글 제목과 날짜를 가져오는 쿼리
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
@@ -60,7 +60,12 @@ public class CommunityController {
             // 결과를 ListView에 추가
             while (rs.next()) {
                 String title = rs.getString("title");
-                posts.add(title); // 게시글 제목만 ObservableList에 추가
+                String post_date = rs.getString("post_date"); // 날짜 가져오기
+                String user_name = rs.getString("user_name");
+
+                // 날짜 형식을 지정하여 출력 (예: "2024-12-04 12:30:00" -> "2024-12-04")
+                String displayText = title + "\t\t" + user_name + "\t\t"+ post_date.substring(0, 10); // 날짜만 표시
+                posts.add(displayText); // 게시글 제목과 날짜를 ObservableList에 추가
             }
 
         } catch (SQLException e) {
