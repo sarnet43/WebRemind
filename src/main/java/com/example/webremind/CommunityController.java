@@ -109,6 +109,20 @@ public class CommunityController {
         // DataStore에서 게시글 리스트를 가져와 ListView에 연결
         ObservableList<String> posts = DataStore.getPosts();
         listView.setItems(posts); // ListView와 ObservableList를 동기화
+
+        // 더블 클릭 이벤트 추가
+        listView.setOnMouseClicked(this::onListViewItemDoubleClick);
+    }
+
+    // ListView 아이템 더블 클릭 처리
+    private void onListViewItemDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // 더블 클릭 감지
+            String selectedPost = listView.getSelectionModel().getSelectedItem();
+            if (selectedPost != null) {
+                // Postcontent.fxml로 이동하며 데이터 전달
+                switchToScene("/fxml/Postcontent.fxml", selectedPost);
+            }
+        }
     }
 
     // 화면 전환 메서드
