@@ -29,6 +29,11 @@ public class Main extends Application {
             Image icon = new Image(getClass().getResourceAsStream("/resources/image/logo.png"));
             primaryStage.getIcons().add(icon);
 
+
+            // 아이콘 설정
+            Image icon = new Image(getClass().getResourceAsStream("/image/logo.png"));
+            primaryStage.getIcons().add(icon);
+
             primaryStage.show();
 
             // 1초 대기 후 로그인 화면으로 전환
