@@ -2,7 +2,7 @@
 .nextbtn {
     -fx-font-size: 16px;                    /* 텍스트 크기를 16px로 설정 */
     -fx-font-weight: bold;                  /* 텍스트 굵기를 bold으로 설정 */
-    -fx-font-family: "Arial";               /* 폰트 설정 */
+    -fx-font-family: "MyCustomFont";        /* 폰트 설정 */
     -fx-background-radius: 5;               /* 버튼의 배경을 둥글게 처리 (반지름 5px) */
     -fx-border-radius: 5;                   /* 버튼의 테두리를 둥글게 처리 (반지름 5px) */
     -fx-padding: 10;                        /* 버튼 안쪽 여백 (패딩)을 10px로 설정 */

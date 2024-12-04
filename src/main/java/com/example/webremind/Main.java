@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -23,6 +24,11 @@ public class Main extends Application {
             Scene scene = new Scene(root);
             primaryStage.setTitle("Web Remind");
             primaryStage.setScene(scene);
+
+            // 아이콘 설정
+            Image icon = new Image(getClass().getResourceAsStream("/image/logo.png"));
+            primaryStage.getIcons().add(icon);
+
             primaryStage.show();
 
             // 1초 대기 후 로그인 화면으로 전환
