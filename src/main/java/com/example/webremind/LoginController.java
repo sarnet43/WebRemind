@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,12 +30,49 @@ public class LoginController {
     @FXML
     private javafx.scene.control.Button btn_login; // 로그인 버튼
 
+    private Font FONT; // 커스텀 폰트
+
     @FXML
     private void initialize() {
-        // ID 길이 제한 (최대 10자)
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        userid.setFont(FONT);
+        password.setFont(FONT);
+        btn_sing.setFont(Font.font(FONT.getFamily(), 14));
+        btn_login.setFont(Font.font(FONT.getFamily(), 14));
+
+        // 버튼 초기화 시 스타일 적용
+        btn_sing.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                btn_sing.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+                btn_login.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
+        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
+        password.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                password.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        userid.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                userid.setFont(FONT);
+            }
+        });
+
+        //id 길이 조절
         userid.textProperty().addListener((observable, oldValue, newValue) -> {
+            // 텍스트 길이가 10자 이상이면, 글자를 더 이상 추가할 수 없도록 함
             if (newValue.length() > 10) {
-                userid.setText(oldValue);
+                userid.setText(oldValue); // 이전 값으로 되돌림
             }
         });
     }
