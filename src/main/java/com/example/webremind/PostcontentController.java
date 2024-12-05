@@ -5,9 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -18,162 +18,168 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class PostcontentController {
+
     @FXML
-    private javafx.scene.control.Button btn_alarm; // 알림 버튼 id
+    private javafx.scene.control.Button btn_alarm;
     @FXML
-    private javafx.scene.control.Button btn_home; // 홈 버튼 id
+    private javafx.scene.control.Button btn_home;
     @FXML
-    private javafx.scene.control.Button btn_mypage; // 마이페이지 버튼 id
+    private javafx.scene.control.Button btn_mypage;
     @FXML
-    private javafx.scene.control.Button btn_storage; //저장 버튼 id
+    private javafx.scene.control.Button btn_storage;
     @FXML
-    private TextArea titleArea; // 제목 입력 필드
+    private TextArea titleArea;
     @FXML
-    private TextArea contentArea; // 내용
-    @FXML
-    private ImageView userimage; // 유저의 이미지
+    private TextArea contentArea;
     @FXML
     private TextArea answerArea;
+    @FXML
+    private VBox commentsBox;
+    @FXML
+    private ScrollPane commentsScrollPane;
 
-    private Font FONT; // 커스텀 폰트
+    private Font FONT;
+    private int userId;
+    private int postId;  // 동적으로 설정될 postId
+    private String loggedInUserName;
 
-    // 기본 이미지 URL
-    private static final String DEFAULT_IMAGE_PATH = "/image/default image.jpg";
+    // 로그인한 사용자 이름 설정
+    public void setLoggedInUserName(String userName) {
+        this.loggedInUserName = userName;
+        System.out.println(loggedInUserName);
+    }
+
+    // 게시글 ID 설정 (CommunityController에서 postId를 설정하는 메서드)
+    public void setPostId(int postId) {
+        this.postId = postId;
+        fetchPostFromDatabase(postId);  // 게시글을 로드하는 메서드 호출
+    }
 
     @FXML
     private void initialize() {
         FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
         if (FONT == null) {
-            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
-            FONT = Font.font("System", 16); // 기본 폰트로 대체
+            FONT = Font.font("System", 16);
         }
 
-        // 컴포넌트에 폰트 적용
         titleArea.setFont(FONT);
         contentArea.setFont(FONT);
         answerArea.setFont(FONT);
-        btn_storage.setFont(Font.font(FONT.getFamily(), 14));
 
-        // 버튼 초기화 시 스타일 적용
-        btn_storage.sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
-                btn_storage.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
-            }
-        });
-
-        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
-        titleArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                titleArea.setFont(FONT);
-            }
-        });
-
-        // TextField에 포커스가 변경될 때마다 폰트 재적용
-        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                contentArea.setFont(FONT);
-            }
-        });
-
-        // TextField에 포커스가 변경될 때마다 폰트 재적용
-        answerArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                answerArea.setFont(FONT);
-            }
-        });
+        //loadComments(); // 댓글 목록 초기화
     }
 
-        @FXML
-        private void onalarm_poButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
-            try {
-                // 알림 화면 로드
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
-                Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-                // 현재 Stage 가져오기
-                Stage stage = (Stage) btn_alarm.getScene().getWindow();      //알림 버튼을 누를 시 새로운 스테이지 생성
-
-                // 알림 화면으로 Scene 교체
-                Scene alarmScene = new Scene(alarmScreen);
-                stage.setScene(alarmScene);
-                // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
-            } catch (IOException e) {                           // IOException 발생 시 예외 처리
-                e.printStackTrace();                            // 에러 메시지를 출력
-            }
+    @FXML
+    private void onalarm_poButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
+            Parent alarmScreen = loader.load();
+            Stage stage = (Stage) btn_alarm.getScene().getWindow();
+            stage.setScene(new Scene(alarmScreen));
+        } catch (IOException e) {
+            showAlert("오류", "알림 화면을 로드할 수 없습니다.");
         }
-
-        @FXML
-        private void onhome_poButtonClick () {            //홈 버튼을 클릭 시 호출되는 메서드
-            try {
-                // 홈 화면 로드
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-                Parent homeScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-                // 현재 Stage 가져오기
-                Stage stage = (Stage) btn_home.getScene().getWindow();      //홈 버튼을 누를 시 새로운 스테이지 생성
-
-                // 홈 화면으로 Scene 교체
-                Scene homeScene = new Scene(homeScreen);
-                stage.setScene(homeScene);
-                // 홈 화면을 새로운 Scene으로 생성하고 Stage에 설정
-            } catch (IOException e) {                           // IOException 발생 시 예외 처리
-                e.printStackTrace();                            // 에러 메시지를 출력
-            }
-        }
-
-        @FXML
-        private void onmypage_poButtonClick () {            //마이페이지 버튼을 클릭 시 호출되는 메서드
-            try {
-                // 마이페이지 화면 로드
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
-                Parent mypage_myScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-                // 현재 Stage 가져오기
-                Stage stage = (Stage) btn_mypage.getScene().getWindow();      //마이페이지 버튼을 누를 시 새로운 스테이지 생성
-
-                // 마이페이지 화면으로 Scene 교체
-                Scene mypage_myScene = new Scene(mypage_myScreen);
-                stage.setScene(mypage_myScene);
-                // 마이페이지 화면을 새로운 Scene으로 생성하고 Stage에 설정
-            } catch (IOException e) {                           // IOException 발생 시 예외 처리
-                e.printStackTrace();                            // 에러 메시지를 출력
-            }
-        }
+    }
 
     @FXML
-    private void onstorage_poButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
+    private void onhome_poButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
+            Parent homeScreen = loader.load();
+            Stage stage = (Stage) btn_home.getScene().getWindow();
+            stage.setScene(new Scene(homeScreen));
+        } catch (IOException e) {
+            showAlert("오류", "홈 화면을 로드할 수 없습니다.");
+        }
+    }
 
-        String user_name = answerArea.getText().trim(); // 닉네임을 가져옴
+    @FXML
+    private void onmypage_poButtonClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
+            Parent mypageScreen = loader.load();
+            Stage stage = (Stage) btn_mypage.getScene().getWindow();
+            stage.setScene(new Scene(mypageScreen));
+        } catch (IOException e) {
+            showAlert("오류", "마이페이지 화면을 로드할 수 없습니다.");
+        }
+    }
 
-        // 제목과 내용이 모두 비어있을 경우 경고 표시
-        if (answerArea.getText().trim().isEmpty()) {
-            showAlert("오류", "모두 입력해주세요.");
+    // 댓글 저장 및 화면에 추가
+    @FXML
+    private void onstorage_poButtonClick() {
+        String content = answerArea.getText().trim();
+
+        if (content.isEmpty()) {
+            showAlert("오류", "댓글 내용을 입력해주세요.");
             return;
         }
 
-        try {
-            // 알림 화면 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+        // 댓글을 DB에 저장하고 화면에 추가
+        saveAndAddComment(loggedInUserName, content);
 
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_storage.getScene().getWindow();      //알림 버튼을 누를 시 새로운 스테이지 생성
+        answerArea.clear();  // 댓글 입력 필드 초기화
+    }
 
-            // 알림 화면으로 Scene 교체
-            Scene alarmScene = new Scene(alarmScreen);
-            stage.setScene(alarmScene);
-            // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
+    private void saveAndAddComment(String userName, String content) {
+        saveCommentToDatabase(userName, content);  // 댓글 DB 저장
+        addCommentToView(userName, content);      // 화면에 댓글 추가
+    }
+
+    private void saveCommentToDatabase(String userName, String content) {
+        String query = "INSERT INTO comments (post_id, user_name, content, comment_date) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, postId);  // 동적으로 받아온 postId 사용
+            pstmt.setString(2, userName);
+            pstmt.setString(3, content);
+            pstmt.setDate(4, java.sql.Date.valueOf(LocalDate.now()));  // 현재 날짜
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("DB 오류", "댓글 저장에 실패했습니다.");
         }
     }
 
+    private void addCommentToView(String userName, String content) {
+        Text comment = new Text(userName + ": " + content);
+        comment.setFont(FONT);
+        commentsBox.getChildren().add(comment);
+
+        // 댓글 추가 후 스크롤을 맨 아래로 이동
+        commentsScrollPane.layout();
+        commentsScrollPane.setVvalue(1.0); // 맨 아래로 이동
+    }
+
+
+    private void loadComments() {
+        commentsBox.getChildren().clear(); // 이전 댓글 목록 초기화
+        String query = "SELECT user_name, content FROM comments WHERE post_id = ? ORDER BY comment_date DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, postId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String userName = rs.getString("user_name");
+                    String content = rs.getString("content");
+                    addCommentToView(userName, content);
+                }
+            }
+
+        } catch (SQLException e) {
+            showAlert("DB 오류", "댓글 목록을 불러올 수 없습니다.");
+        }
+    }
+
+
+    // 게시글 내용 불러오기
     public void fetchPostFromDatabase(int postId) {
         String query = "SELECT * FROM posts WHERE id = ?";
-
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -183,28 +189,27 @@ public class PostcontentController {
                     String title = rs.getString("title");
                     String content = rs.getString("content");
 
-                    // 데이터 표시 (예: Label, TextArea 등)
                     titleArea.setText(title);
                     contentArea.setText(content);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("DB 오류", "게시글을 불러올 수 없습니다.");
         }
 
-        // 제목과 내용 필드를 읽기 전용으로 설정
         titleArea.setEditable(false);
         contentArea.setEditable(false);
+
+        // 댓글 로드 메서드 추가
+        loadComments();
     }
 
-    // 경고창 표시 메서드
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        // 경고창에도 커스텀 폰트 적용
-        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
     }
 }

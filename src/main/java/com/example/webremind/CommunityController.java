@@ -36,6 +36,8 @@ public class CommunityController {
     @FXML
     private ListView<String> listView;
 
+    private Font FONT;
+
     private String loggedInUserName;
 
     // 사용자 이름을 커뮤니티 화면에 전달
@@ -46,6 +48,15 @@ public class CommunityController {
 
     // 화면 초기화 시 호출되는 메서드
     public void initialize() {
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        listView.setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
+
         // MySQL에서 게시글 리스트를 가져와 ListView에 연결
         ObservableList<Post> posts = fetchPostsFromDatabase();
 
@@ -191,8 +202,6 @@ public class CommunityController {
             }
         }
     }
-
-
     private void switchToScene(String fxmlFile, int postId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -200,12 +209,15 @@ public class CommunityController {
 
             // PostcontentController에 postId 전달
             PostcontentController controller = loader.getController();
-            controller.fetchPostFromDatabase(postId);
-
+            controller.setPostId(postId);  // postId를 전달하여 게시글을 로드
+            controller.setLoggedInUserName(loggedInUserName);
+            // Stage 전환
             Stage stage = (Stage) btn_home.getScene().getWindow();
-            stage.setScene(new Scene(screen));
+            stage.setScene(new Scene(screen)); // 새 Scene으로 화면 전환
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
