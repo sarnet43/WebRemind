@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -21,7 +23,7 @@ public class AlarmController {
     @FXML
     private Text alarm_text;          //"알림" 텍스트
     @FXML
-    private javafx.scene.control.ListView notificationList;     //알림 리스트
+    private ListView<String> notificationList;     //알림 리스트
 
     private Font FONT; // 커스텀 폰트
 
@@ -44,6 +46,48 @@ public class AlarmController {
                 alarm_text.setFont(FONT);
             }
         });
+
+        notificationList.getItems().setAll(DataStore.getComments());
+
+        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
+        notificationList.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                String selectedComment = notificationList.getSelectionModel().getSelectedItem();
+                switchToPostContent(selectedComment);
+            }
+        });
+
+        // 알림 리스트에 저장된 댓글 불러오기
+        notificationList.getItems().setAll(DataStore.getComments());
+
+        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
+        notificationList.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                String selectedComment = notificationList.getSelectionModel().getSelectedItem();
+                if (selectedComment != null) {
+                    switchToPostContent(selectedComment);
+                }
+            }
+        });
+
+    }
+
+    // PostContent 화면으로 전환
+    private void switchToPostContent(String comment) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Postcontent.fxml"));
+            Parent screen = loader.load();
+
+            // PostcontentController로 선택된 댓글 전달
+            PostcontentController controller = loader.getController();
+            controller.loadComment(comment);
+
+            Stage stage = (Stage) notificationList.getScene().getWindow();
+            stage.setScene(new Scene(screen));
+        } catch (IOException e) {
+            showAlert("오류", "화면을 불러올 수 없습니다.");
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -101,6 +145,16 @@ public class AlarmController {
         } catch (IOException e) {                           // IOException 발생 시 예외 처리
             e.printStackTrace();                            // 에러 메시지를 출력
         }
+    }
+
+    // 경고창 표시 메서드
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        // 경고창에도 커스텀 폰트 적용
+        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
+        alert.showAndWait();
     }
 
 }

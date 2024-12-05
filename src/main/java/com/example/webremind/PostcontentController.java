@@ -75,9 +75,9 @@ public class PostcontentController {
         });
 
         // TextField에 포커스가 변경될 때마다 폰트 재적용
-        answerArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) { // 포커스가 잡힐 때
-                answerArea.setFont(FONT);
+                contentArea.setFont(FONT);
             }
         });
     }
@@ -140,31 +140,16 @@ public class PostcontentController {
         }
 
     @FXML
-    private void onstorage_poButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
+    private void onstorage_poButtonClick() {
+        String comment = answerArea.getText().trim(); // 댓글 가져오기
 
-        String user_name = answerArea.getText().trim(); // 닉네임을 가져옴
-
-        // 제목과 내용이 모두 비어있을 경우 경고 표시
-        if (answerArea.getText().trim().isEmpty()) {
-            showAlert("오류", "모두 입력해주세요.");
+        if (comment.isEmpty()) {
+            showAlert("오류", "댓글을 입력해주세요.");
             return;
         }
 
-        try {
-            // 알림 화면 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_storage.getScene().getWindow();      //알림 버튼을 누를 시 새로운 스테이지 생성
-
-            // 알림 화면으로 Scene 교체
-            Scene alarmScene = new Scene(alarmScreen);
-            stage.setScene(alarmScene);
-            // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
-        }
+        // 댓글 저장
+        DataStore.addComment(comment);
     }
 
     // 게시글 데이터를 설정하는 메서드
@@ -193,5 +178,9 @@ public class PostcontentController {
         // 경고창에도 커스텀 폰트 적용
         alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
+    }
+
+    public void loadComment(String comment) {
+        contentArea.setText(comment);
     }
 }
