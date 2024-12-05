@@ -28,7 +28,7 @@ public class Main extends Application {
             //아이콘 설정
             Image icon = new Image(getClass().getResourceAsStream("/image/logo.png"));
             primaryStage.getIcons().add(icon);
-
+            primaryStage.setResizable(false); // 윈도우 크기 고정
             primaryStage.show();
 
             // 2초 대기 후 로그인 화면으로 전환
