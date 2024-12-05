@@ -16,7 +16,7 @@
 
 /* 버튼 스타일 */
 .button {
-    -fx-font-size: 16px;
+    -fx-font-family: "SB 어그로 B";
     -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-border-radius: 5;
@@ -25,11 +25,13 @@
 }
 
 .loginButton {
+    -fx-font-family: "SB 어그로 B";
     -fx-background-color: #4F735C;
     -fx-text-fill: #FFFFFF;
 }
 
 .signupButton {
+    -fx-font-family: "SB 어그로 B";
     -fx-background-color: #D3D3D3;
     -fx-text-fill: #4F735C;
 }

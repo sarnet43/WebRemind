@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,10 +31,54 @@ public class SingupController {
     private PasswordField checkPasswd;   //유저 비밀번호 확인
 
     @FXML
-    private javafx.scene.control.Button btn_next; // 다음 버튼 id
+    private javafx.scene.control.Button btn_next;          //다음 버튼 id
+
+    private Font FONT; // 커스텀 폰트
 
     @FXML
     private void initialize() {
+
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        userid.setFont(FONT);
+        username.setFont(FONT);
+        passwd.setFont(FONT);
+        checkPasswd.setFont(FONT);
+        btn_next.setFont(Font.font(FONT.getFamily(), 14));
+
+        // 버튼 초기화 시 스타일 적용
+        btn_next.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                btn_next.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
+        // 포커스가 변경될 때마다 폰트 재적용
+        passwd.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                passwd.setFont(FONT);
+            }
+        });
+
+        // 포커스가 변경될 때마다 폰트 재적용
+        checkPasswd.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                checkPasswd.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        userid.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                userid.setFont(FONT);
+            }
+        });
+
         // username textProperty에 Listener 추가
         username.textProperty().addListener((observable, oldValue, newValue) -> {
             // 텍스트 길이가 10자 이상이면, 글자를 더 이상 추가할 수 없도록 함
@@ -117,13 +163,13 @@ public class SingupController {
         // 화면 전환
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-            Parent loginScreen = loader.load(); // FXML 파일을 로드하여 Parent 변환
+            Parent communityScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_next.getScene().getWindow(); // 다음 버튼을 누를 시 새로운 스테이지 생성
+            Stage stage = (Stage) btn_next.getScene().getWindow();      //다음 버튼을 누를 시 새로운 스테이지 생성
 
-            Scene loginScene = new Scene(loginScreen);
-            stage.setScene(loginScene);
+            Scene communityScene = new Scene(communityScreen);
+            stage.setScene(communityScene);
 
         } catch (IOException e) { // IOException 발생 시 예외 처리
             e.printStackTrace(); // 에러 메시지를 출력
@@ -131,13 +177,14 @@ public class SingupController {
         }
     }
 
-
     // 경고창 표시 메서드
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        // 경고창에도 커스텀 폰트 적용
+        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
     }
 }
