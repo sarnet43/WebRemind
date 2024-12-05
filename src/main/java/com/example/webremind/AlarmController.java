@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,12 +14,37 @@ public class AlarmController {
 
     @FXML
     private javafx.scene.control.Button btn_alarm;           //알림 버튼 id
-
     @FXML
     private javafx.scene.control.Button btn_home;          //홈 버튼 id
-
     @FXML
     private javafx.scene.control.Button btn_mypage;          //마이페이지 버튼 id
+    @FXML
+    private Text alarm_text;          //"알림" 텍스트
+    @FXML
+    private javafx.scene.control.ListView notificationList;     //알림 리스트
+
+    private Font FONT; // 커스텀 폰트
+
+
+    @FXML
+    private void initialize() {
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        alarm_text.setFont(FONT);
+        notificationList.setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
+
+        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
+        alarm_text.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                alarm_text.setFont(FONT);
+            }
+        });
+    }
 
     @FXML
     private void onalarm_alButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드

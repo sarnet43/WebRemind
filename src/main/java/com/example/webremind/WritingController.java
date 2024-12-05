@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,8 +29,43 @@ public class WritingController {
     @FXML
     private Button btn_back; // 뒤로 가기 버튼
 
+    private Font FONT;
+
     @FXML
     private void initialize() {
+
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        titleField.setFont(FONT);
+        contentArea.setFont(FONT);
+        btn_save.setFont(Font.font(FONT.getFamily(), 14));
+
+        // 버튼 초기화 시 스타일 적용
+        btn_save.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                btn_save.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
+        // 포커스가 변경될 때마다 폰트 재적용
+        titleField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                titleField.setFont(FONT);
+            }
+        });
+
+        // 포커스가 변경될 때마다 폰트 재적용
+        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                contentArea.setFont(FONT);
+            }
+        });
+
         // titleField의 textProperty에 Listener 추가
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 텍스트 길이가 10자 이상이면, 글자를 더 이상 추가할 수 없도록 함
@@ -53,10 +89,13 @@ public class WritingController {
         // 현재 날짜 구하기 (시스템 시계, 시스템 타임존)
         LocalDate now = LocalDate.now();
 
-        // 게시글 저장 (실제 저장 로직으로 교체 가능)
-        String post = "   " + title + "\t" + "   " + now; // 날짜를 오른쪽 끝에 추가
-        DataStore.addPost(post);  // 가상의 데이터 저장 메서드 호출
-        System.out.println("저장된 게시글: " + post);     // 확인용
+        // 게시글 저장 (각각 따로 저장)
+        DataStore.addTitle(title);
+        DataStore.addDate(now.toString());
+        DataStore.addContent(content);
+
+        // 게시글 정보 출력 (디버깅용)
+        System.out.println("저장된 게시글: " + title + ", " + now + ", " + content);
 
         // 커뮤니티 화면으로 전환
         switchToScene("/fxml/Community.fxml");

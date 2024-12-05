@@ -7,9 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class CommunityController {
 
@@ -27,6 +29,8 @@ public class CommunityController {
 
     @FXML
     private ListView<String> listView;
+
+    private Font FONT;
 
     @FXML
     private void onalarm_comButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
@@ -105,13 +109,38 @@ public class CommunityController {
     }
 
     // 화면 초기화 시 호출되는 메서드
+    @FXML
     public void initialize() {
-        // DataStore에서 게시글 리스트를 가져와 ListView에 연결
-        ObservableList<String> posts = DataStore.getPosts();
-        listView.setItems(posts); // ListView와 ObservableList를 동기화
+
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        listView.setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
+
+        // DataStore에서 저장된 제목과 날짜를 가져와 ListView에 표시
+        updatePostList();
 
         // 더블 클릭 이벤트 추가
         listView.setOnMouseClicked(this::onListViewItemDoubleClick);
+    }
+
+    // 게시글 제목과 날짜를 ListView에 업데이트
+    private void updatePostList() {
+        listView.getItems().clear(); // 기존 항목을 지운다.
+
+        // 제목과 날짜 리스트를 가져옴
+        List<String> titles = DataStore.getTitles();
+        List<String> dates = DataStore.getDates();
+
+        // 제목과 날짜를 합쳐서 리스트에 추가
+        for (int i = 0; i < titles.size(); i++) {
+            String postItem = titles.get(i) + " - " + dates.get(i); // 제목과 날짜 결합
+            listView.getItems().add(postItem); // ListView에 추가
+        }
     }
 
     // ListView 아이템 더블 클릭 처리

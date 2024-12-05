@@ -11,7 +11,7 @@
             <Image url="@../image/logo.png" />
          </image>
       </ImageView>
-      <Text fx:id="text1" blendMode="DARKEN" cache="true" layoutX="85.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="잊어버린 작품을 찾아드립니다">
+      <Text fx:id="start_text" blendMode="DARKEN" cache="true" layoutX="85.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="잊어버린 작품을 찾아드립니다">
          <font>
             <Font size="14.0" />
          </font>
