@@ -11,22 +11,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AlarmController {
 
     @FXML
-    private javafx.scene.control.Button btn_alarm;           //알림 버튼 id
+    private javafx.scene.control.Button btn_alarm;           // 알림 버튼
     @FXML
-    private javafx.scene.control.Button btn_home;          //홈 버튼 id
+    private javafx.scene.control.Button btn_home;            // 홈 버튼
     @FXML
-    private javafx.scene.control.Button btn_mypage;          //마이페이지 버튼 id
+    private javafx.scene.control.Button btn_mypage;          // 마이페이지 버튼
     @FXML
-    private Text alarm_text;          //"알림" 텍스트
+    private Text alarm_text;                                 // "알림" 텍스트
     @FXML
-    private ListView<String> notificationList;     //알림 리스트
+    private ListView<String> notificationList;               // 알림 리스트
 
-    private Font FONT; // 커스텀 폰트
-
+    private Font FONT;                                       // 커스텀 폰트
 
     @FXML
     private void initialize() {
@@ -40,110 +40,66 @@ public class AlarmController {
         alarm_text.setFont(FONT);
         notificationList.setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
 
-        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
-        alarm_text.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                alarm_text.setFont(FONT);
-            }
-        });
-
-        notificationList.getItems().setAll(DataStore.getComments());
-
-        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
-        notificationList.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                String selectedComment = notificationList.getSelectionModel().getSelectedItem();
-                switchToPostContent(selectedComment);
-            }
-        });
-
         // 알림 리스트에 저장된 댓글 불러오기
-        notificationList.getItems().setAll(DataStore.getComments());
+        loadNotifications();
 
-        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
+        // 알림 항목을 두 번 클릭 시 해당 게시글로 이동
         notificationList.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 String selectedComment = notificationList.getSelectionModel().getSelectedItem();
                 if (selectedComment != null) {
-                    switchToPostContent(selectedComment);
+                    //switchToPostContent(selectedComment);
                 }
             }
         });
-
     }
 
-    // PostContent 화면으로 전환
-    private void switchToPostContent(String comment) {
+    // 알림을 화면에 불러오기 (DB에서 불러온 데이터를 사용)
+    private void loadNotifications() {
+        List<String> notifications = DataStore.getNotifications();
+        notificationList.getItems().setAll(notifications);
+    }
+
+
+    @FXML
+    private void onalarm_alButtonClick() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Postcontent.fxml"));
-            Parent screen = loader.load();
+            // 알림 화면 로드
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
+            Parent alarmScreen = loader.load();
 
-            // PostcontentController로 선택된 댓글 전달
-            PostcontentController controller = loader.getController();
-            controller.loadComment(comment);
-
-            Stage stage = (Stage) notificationList.getScene().getWindow();
-            stage.setScene(new Scene(screen));
+            Stage stage = (Stage) btn_alarm.getScene().getWindow();
+            stage.setScene(new Scene(alarmScreen));
         } catch (IOException e) {
-            showAlert("오류", "화면을 불러올 수 없습니다.");
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void onalarm_alButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
-        try {
-            // 알림 화면 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Alarm.fxml"));
-            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_alarm.getScene().getWindow();      //알림 버튼을 누를 시 새로운 스테이지 생성
-
-            // 알림 화면으로 Scene 교체
-            Scene alarmScene = new Scene(alarmScreen);
-            stage.setScene(alarmScene);
-            // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
-        }
-    }
-
-    @FXML
-    private void onhome_alButtonClick() {            //홈 버튼을 클릭 시 호출되는 메서드
+    private void onhome_alButtonClick() {
         try {
             // 홈 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
-            Parent homeScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+            Parent homeScreen = loader.load();
 
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_home.getScene().getWindow();      //홈 버튼을 누를 시 새로운 스테이지 생성
-
-            // 홈 화면으로 Scene 교체
-            Scene homeScene = new Scene(homeScreen);
-            stage.setScene(homeScene);
-            // 홈 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
+            Stage stage = (Stage) btn_home.getScene().getWindow();
+            stage.setScene(new Scene(homeScreen));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
-    private void onmypage_alButtonClick() {            //마이페이지 버튼을 클릭 시 호출되는 메서드
+    private void onmypage_alButtonClick() {
         try {
             // 마이페이지 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
-            Parent mypageScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+            Parent mypageScreen = loader.load();
 
-            // 현재 Stage 가져오기
-            Stage stage = (Stage) btn_mypage.getScene().getWindow();      //마이페이지 버튼을 누를 시 새로운 스테이지 생성
-
-            // 마이페이지 화면으로 Scene 교체
-            Scene mypageScene = new Scene(mypageScreen);
-            stage.setScene(mypageScene);
-            // 마이페이지 화면을 새로운 Scene으로 생성하고 Stage에 설정
-        } catch (IOException e) {                           // IOException 발생 시 예외 처리
-            e.printStackTrace();                            // 에러 메시지를 출력
+            Stage stage = (Stage) btn_mypage.getScene().getWindow();
+            stage.setScene(new Scene(mypageScreen));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -152,9 +108,7 @@ public class AlarmController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(message);
-        // 경고창에도 커스텀 폰트 적용
         alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
     }
-
 }

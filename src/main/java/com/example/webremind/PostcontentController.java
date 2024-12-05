@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -20,9 +19,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class PostcontentController {
+
     @FXML
     private javafx.scene.control.Button btn_alarm; // 알림 버튼 id
     @FXML
@@ -38,11 +37,11 @@ public class PostcontentController {
     @FXML
     private ImageView userimage; // 유저의 이미지
     @FXML
-    private TextArea answerArea;
+    private TextArea answerArea; // 댓글 입력 필드
     @FXML
-    private VBox commentsBox;
+    private VBox commentsBox; // 댓글 표시 상자
     @FXML
-    private ScrollPane commentsScrollPane;
+    private ScrollPane commentsScrollPane; // 댓글 스크롤 창
 
     private Font FONT;
     private int userId;
@@ -52,7 +51,7 @@ public class PostcontentController {
     // 로그인한 사용자 이름 설정
     public void setLoggedInUserName(String userName) {
         this.loggedInUserName = userName;
-        System.out.println(loggedInUserName);
+        System.out.println("로그인한 사용자: " + loggedInUserName);
     }
 
     // 게시글 ID 설정 (CommunityController에서 postId를 설정하는 메서드)
@@ -73,36 +72,9 @@ public class PostcontentController {
         contentArea.setFont(FONT);
         answerArea.setFont(FONT);
         btn_storage.setFont(Font.font(FONT.getFamily(), 14));
-
-        // 버튼 초기화 시 스타일 적용
-        btn_storage.sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
-                btn_storage.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
-            }
-        });
-
-        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
-        titleArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                titleArea.setFont(FONT);
-            }
-        });
-
-        // TextField에 포커스가 변경될 때마다 폰트 재적용
-        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                contentArea.setFont(FONT);
-            }
-        });
-
-        // TextField에 포커스가 변경될 때마다 폰트 재적용
-        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) { // 포커스가 잡힐 때
-                contentArea.setFont(FONT);
-            }
-        });
     }
 
+    // 알림 화면으로 이동
     @FXML
     private void onalarm_poButtonClick() {
         try {
@@ -115,6 +87,7 @@ public class PostcontentController {
         }
     }
 
+    // 홈 화면으로 이동
     @FXML
     private void onhome_poButtonClick() {
         try {
@@ -127,24 +100,18 @@ public class PostcontentController {
         }
     }
 
-        @FXML
-        private void onmypage_poButtonClick () {            //마이페이지 버튼을 클릭 시 호출되는 메서드
-            try {
-                // 마이페이지 화면 로드
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
-                Parent mypage_myScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
-
-                // 현재 Stage 가져오기
-                Stage stage = (Stage) btn_mypage.getScene().getWindow();      //마이페이지 버튼을 누를 시 새로운 스테이지 생성
-
-                // 마이페이지 화면으로 Scene 교체
-                Scene mypage_myScene = new Scene(mypage_myScreen);
-                stage.setScene(mypage_myScene);
-                // 마이페이지 화면을 새로운 Scene으로 생성하고 Stage에 설정
-            } catch (IOException e) {                           // IOException 발생 시 예외 처리
-                e.printStackTrace();                            // 에러 메시지를 출력
-            }
+    // 마이페이지로 이동
+    @FXML
+    private void onmypage_poButtonClick () {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
+            Parent mypage_myScreen = loader.load();
+            Stage stage = (Stage) btn_mypage.getScene().getWindow();
+            stage.setScene(new Scene(mypage_myScreen));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
     // 댓글 저장 및 화면에 추가
     @FXML
@@ -158,15 +125,18 @@ public class PostcontentController {
 
         // 댓글을 DB에 저장하고 화면에 추가
         saveAndAddComment(loggedInUserName, content);
-
         answerArea.clear();  // 댓글 입력 필드 초기화
     }
 
     private void saveAndAddComment(String userName, String content) {
         saveCommentToDatabase(userName, content);  // 댓글 DB 저장
         addCommentToView(userName, content);      // 화면에 댓글 추가
+
+        // 댓글을 작성한 후 알림도 생성
+        addCommentWithNotification(postId, userName, content);
     }
 
+    // 댓글을 DB에 저장
     private void saveCommentToDatabase(String userName, String content) {
         String query = "INSERT INTO comments (post_id, user_name, content, comment_date) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -184,6 +154,7 @@ public class PostcontentController {
         }
     }
 
+    // 댓글을 화면에 추가
     private void addCommentToView(String userName, String content) {
         Text comment = new Text(userName + ": " + content);
         comment.setFont(FONT);
@@ -194,7 +165,52 @@ public class PostcontentController {
         commentsScrollPane.setVvalue(1.0); // 맨 아래로 이동
     }
 
+    // 알림을 생성하는 메서드
+    private void addCommentWithNotification(int postId, String userName, String content) {
+        // 게시글 작성자 정보 가져오기 (작성자의 userid를 반환해야 함)
+        String authorUserId = getPostAuthor(postId);  // 수정된 메서드로 수정 필요
 
+        if (authorUserId != null && !authorUserId.equals(userName)) {
+            // 알림 생성
+            String query = "INSERT INTO notifications (post_id, recipient_user_id, message, created_at) VALUES (?, ?, ?, ?)";
+            try (Connection connection = DBConnection.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+
+                String message = userName + "님이 댓글을 달았습니다: " + content;
+                statement.setInt(1, postId);
+                statement.setString(2, authorUserId);  // 실제 userid를 사용
+                statement.setString(3, message);
+                statement.setDate(4, java.sql.Date.valueOf(LocalDate.now())); // 알림 생성 날짜
+                statement.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();  // 오류 메시지 출력
+                showAlert("알림 오류", "알림을 저장하는 중 오류가 발생했습니다.");
+            }
+        }
+    }
+
+
+    // 게시글 작성자 가져오기
+    private String getPostAuthor(int postId) {
+        String query = "SELECT user_id FROM posts WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, postId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("user_id");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // 댓글 목록 로드
     private void loadComments() {
         commentsBox.getChildren().clear(); // 이전 댓글 목록 초기화
         String query = "SELECT user_name, content FROM comments WHERE post_id = ? ORDER BY comment_date DESC";
@@ -214,7 +230,6 @@ public class PostcontentController {
             showAlert("DB 오류", "댓글 목록을 불러올 수 없습니다.");
         }
     }
-
 
     // 게시글 내용 불러오기
     public void fetchPostFromDatabase(int postId) {
@@ -249,12 +264,6 @@ public class PostcontentController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        // 경고창에도 커스텀 폰트 적용
-        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
-    }
-
-    public void loadComment(String comment) {
-        contentArea.setText(comment);
     }
 }

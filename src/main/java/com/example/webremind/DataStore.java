@@ -17,6 +17,9 @@ public class DataStore {
     private static final List<String> titles = new ArrayList<>(); // 일반 List로 관리
     private static final List<String> dates = new ArrayList<>();  // 일반 List로 관리
 
+    // 메모리 내에서 관리되는 알림 리스트
+    private static final List<String> notifications = new ArrayList<>(); // 알림 리스트
+
     // 댓글 저장
     public static void addComment(String comment) {
         comments.add(comment);
@@ -63,6 +66,16 @@ public class DataStore {
             userDataInstance = new UserData();
         }
         return userDataInstance;
+    }
+
+    // 알림 저장 (메모리 내에서 관리)
+    public static void addNotification(String message) {
+        notifications.add(message); // 알림을 리스트에 추가
+    }
+
+    // 알림 목록 가져오기
+    public static List<String> getNotifications() {
+        return new ArrayList<>(notifications); // 알림 리스트 복사본 반환
     }
 
     public static class UserData {
