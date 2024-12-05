@@ -75,7 +75,7 @@ public class LoginController {
 
         try {
             // 회원가입 화면 로드
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SingUp.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SignUp.fxml"));
             Parent signupScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
 
             // 현재 Stage 가져오기

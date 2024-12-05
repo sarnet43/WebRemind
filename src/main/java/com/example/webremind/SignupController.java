@@ -8,17 +8,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class SingupController {
+public class SignupController {
 
     @FXML
     private TextField username; // 유저 닉네임
     @FXML
-    private TextField userid; // 제목 입력 필드
+    private TextField userid; // 아이디 필드
     @FXML
     private PasswordField passwd;   //유저 비밀번호
     @FXML
