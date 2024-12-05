@@ -47,34 +47,38 @@ public class CommunityController {
         // MySQL에서 게시글 리스트를 가져와 ListView에 연결
         ObservableList<String> posts = fetchPostsFromDatabase();
         listView.setItems(posts); // ListView와 ObservableList를 동기화
+
+        // 더블 클릭 이벤트 추가
+        listView.setOnMouseClicked(this::onListViewItemDoubleClick);
     }
 
     // MySQL에서 게시글 제목만 가져와 ListView에 표시
     private ObservableList<String> fetchPostsFromDatabase() {
-        ObservableList<String> posts = FXCollections.observableArrayList(); // ObservableList 생성
-        String query = "SELECT title, post_date, user_name FROM posts ORDER BY id DESC"; // 게시글 제목과 날짜를 가져오는 쿼리
+        ObservableList<String> posts = FXCollections.observableArrayList();
+        String query = "SELECT id, title, post_date, user_name FROM posts ORDER BY id DESC";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query);
              ResultSet rs = pstmt.executeQuery()) {
 
-            // 결과를 ListView에 추가
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String title = rs.getString("title");
-                String post_date = rs.getString("post_date"); // 날짜 가져오기
-                String user_name = rs.getString("user_name");
+                String postDate = rs.getString("post_date").substring(0, 10); // 날짜 형식 수정
+                String userName = rs.getString("user_name");
 
-                // 날짜 형식을 지정하여 출력 (예: "2024-12-04 12:30:00" -> "2024-12-04")
-                String displayText = title + "\t\t" + user_name + "\t\t"+ post_date.substring(0, 10); // 날짜만 표시
-                posts.add(displayText); // 게시글 제목과 날짜를 ObservableList에 추가
+                // ID를 포함한 게시글 데이터를 ListView에 추가
+                posts.add(id + "\t" + title + "\t\t" + userName + "\t\t" + postDate);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("오류", "게시글을 불러오는 데 실패했습니다.");
         }
+
         return posts;
     }
+
 
     // 알림 버튼 클릭 시 호출되는 메서드
     @FXML
@@ -161,38 +165,32 @@ public class CommunityController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    // 화면 초기화 시 호출되는 메서드
-    public void initialize() {
-        // DataStore에서 게시글 리스트를 가져와 ListView에 연결
-        ObservableList<String> posts = DataStore.getPosts();
-        listView.setItems(posts); // ListView와 ObservableList를 동기화
-
-        // 더블 클릭 이벤트 추가
-        listView.setOnMouseClicked(this::onListViewItemDoubleClick);
     }
+
+
 
     // ListView 아이템 더블 클릭 처리
     private void onListViewItemDoubleClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // 더블 클릭 감지
             String selectedPost = listView.getSelectionModel().getSelectedItem();
             if (selectedPost != null) {
-                // Postcontent.fxml로 이동하며 데이터 전달
-                switchToScene("/fxml/Postcontent.fxml", selectedPost);
+                // 선택된 아이템에서 ID 추출
+                int id = Integer.parseInt(selectedPost.split("\t")[0]);
+                // 화면 전환 시 ID 전달
+                switchToScene("/fxml/Postcontent.fxml", id);
             }
         }
     }
 
-    // 화면 전환 메서드
-    private void switchToScene(String fxmlFile, String postContent) {
+
+    private void switchToScene(String fxmlFile, int postId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent screen = loader.load();
 
             // PostcontentController에 데이터 전달
-            if (postContent != null) {
-                PostcontentController controller = loader.getController();
-                controller.setPostContent(postContent);
-            }
+            PostcontentController controller = loader.getController();
+            controller.fetchPostFromDatabase(postId); // ID 전달
 
             Stage stage = (Stage) btn_home.getScene().getWindow();
             stage.setScene(new Scene(screen));
@@ -200,4 +198,5 @@ public class CommunityController {
             e.printStackTrace();
         }
     }
+
 }

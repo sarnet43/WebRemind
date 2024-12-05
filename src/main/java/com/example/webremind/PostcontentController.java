@@ -11,6 +11,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PostcontentController {
     @FXML
@@ -88,17 +92,28 @@ public class PostcontentController {
             }
         }
 
-    // 게시글 데이터를 설정하는 메서드
-    public void setPostContent(String postContent) {
-        // 전달받은 데이터를 파싱하여 제목과 내용을 설정
-        String[] parts = postContent.split("\t", 2);
-        if (parts.length >= 2) {
-            titleArea.setText(parts[0].trim()); // 제목 설정
-            contentArea.setText(parts[1].trim()); // 내용 설정
-        } else {
-            titleArea.setText(postContent.trim());
-            contentArea.setText("내용 없음");
-        }
+    public void fetchPostFromDatabase(int postId) {
+        String query = "SELECT title, content FROM posts WHERE id = ?";
 
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, postId); // 전달받은 ID 설정
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // 결과에서 제목과 내용 가져오기
+                    String title = rs.getString("title");
+                    String content = rs.getString("content");
+
+                    // TextArea에 설정
+                    titleArea.setText(title);
+                    contentArea.setText(content);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 }
