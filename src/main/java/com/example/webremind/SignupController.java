@@ -16,20 +16,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SignupController {
+public class SingupController {
 
     @FXML
     private TextField username; // 유저 닉네임
-
     @FXML
     private TextField userid; // 유저 아이디
 
     @FXML
     private PasswordField passwd;   //유저 비밀번호
-
     @FXML
     private PasswordField checkPasswd;   //유저 비밀번호 확인
-
     @FXML
     private javafx.scene.control.Button btn_next;          //다음 버튼 id
 

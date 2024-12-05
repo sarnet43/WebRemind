@@ -19,16 +19,13 @@ import java.sql.SQLException;
 public class LoginController {
 
     @FXML
-    private TextField userid; // 사용자 ID 입력 필드
-
+    private TextField userid; // 아이디
     @FXML
-    private PasswordField password; // 사용자 비밀번호 입력 필드
-
+    private PasswordField password; // 유저 닉네임
     @FXML
-    private javafx.scene.control.Button btn_sing; // 회원가입 버튼
-
+    private javafx.scene.control.Button btn_sing;           //회원가입 버튼 id
     @FXML
-    private javafx.scene.control.Button btn_login; // 로그인 버튼
+    private javafx.scene.control.Button btn_login;          //로그인 버튼 id
 
     private Font FONT; // 커스텀 폰트
 
@@ -78,7 +75,8 @@ public class LoginController {
     }
 
     @FXML
-    private void onSignupButtonClick() {
+    private void onSignupButtonClick() {            //회원가입 버튼을 클릭 시 호출되는 메서드
+
         try {
             // 회원가입 화면 로드
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SingUp.fxml"));
@@ -90,8 +88,9 @@ public class LoginController {
             // 회원가입 화면으로 Scene 전환
             Scene signupScene = new Scene(signupScreen);
             stage.setScene(signupScene);
-        } catch (IOException e) {
-            e.printStackTrace();
+            // 회원가입 화면을 새로운 Scene으로 생성하고 Stage에 설정
+        } catch (IOException e) {                           // IOException 발생 시 예외 처리
+            e.printStackTrace();                            // 에러 메시지를 출력
         }
     }
 
@@ -179,6 +178,9 @@ public class LoginController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        // 경고창에도 커스텀 폰트 적용
+        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
     }
+
 }

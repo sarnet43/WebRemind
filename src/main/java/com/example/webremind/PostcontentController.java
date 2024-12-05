@@ -112,6 +112,9 @@ public class PostcontentController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
 
+        // 제목과 내용 필드를 읽기 전용으로 설정
+        titleArea.setEditable(false);
+        contentArea.setEditable(false);
+    }
 }

@@ -46,9 +46,9 @@
          </image>
       </ImageView>
 
-      <TextArea fx:id="titleArea" layoutX="86.0" layoutY="46.0" prefHeight="12.0" prefWidth="242.0" text="제목" />
+      <TextArea fx:id="titleArea" layoutX="86.0" layoutY="46.0" prefHeight="12.0" prefWidth="242.0" text="제목"  editable="false"/>
 
-      <TextArea fx:id="contentArea" layoutX="19.0" layoutY="107.0" prefHeight="287.0" prefWidth="324.0" text="내용">
+      <TextArea fx:id="contentArea" layoutX="19.0" layoutY="107.0" prefHeight="287.0" prefWidth="324.0" text="내용"  editable="false">
          <font>
             <Font size="13.0" />
          </font>
