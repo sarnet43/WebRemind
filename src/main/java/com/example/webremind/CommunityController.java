@@ -45,16 +45,29 @@ public class CommunityController {
     // 화면 초기화 시 호출되는 메서드
     public void initialize() {
         // MySQL에서 게시글 리스트를 가져와 ListView에 연결
-        ObservableList<String> posts = fetchPostsFromDatabase();
-        listView.setItems(posts); // ListView와 ObservableList를 동기화
+        ObservableList<Post> posts = fetchPostsFromDatabase();
 
+        // ListView에 표시할 텍스트 설정
+        ObservableList<String> displayTexts = FXCollections.observableArrayList();
+        for (Post post : posts) {
+            displayTexts.add(post.getDisplayText());
+        }
+        listView.setItems(displayTexts);
         // 더블 클릭 이벤트 추가
-        listView.setOnMouseClicked(this::onListViewItemDoubleClick);
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+                if (selectedIndex >= 0) {
+                    Post selectedPost = posts.get(selectedIndex);
+                    switchToScene("/fxml/Postcontent.fxml", selectedPost.getId());
+                }
+            }
+        });
     }
 
-    // MySQL에서 게시글 제목만 가져와 ListView에 표시
-    private ObservableList<String> fetchPostsFromDatabase() {
-        ObservableList<String> posts = FXCollections.observableArrayList();
+    // MySQL에서 게시글을 가져오는 메서드
+    private ObservableList<Post> fetchPostsFromDatabase() {
+        ObservableList<Post> posts = FXCollections.observableArrayList();
         String query = "SELECT id, title, post_date, user_name FROM posts ORDER BY id DESC";
 
         try (Connection conn = DBConnection.getConnection();
@@ -64,18 +77,15 @@ public class CommunityController {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String title = rs.getString("title");
-                String postDate = rs.getString("post_date").substring(0, 10); // 날짜 형식 수정
+                String postDate = rs.getString("post_date").substring(0, 10); // 날짜만 표시
                 String userName = rs.getString("user_name");
 
-                // ID를 포함한 게시글 데이터를 ListView에 추가
-                posts.add(id + "\t" + title + "\t\t" + userName + "\t\t" + postDate);
+                posts.add(new Post(id, title, userName, postDate));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("오류", "게시글을 불러오는 데 실패했습니다.");
         }
-
         return posts;
     }
 
@@ -188,9 +198,9 @@ public class CommunityController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent screen = loader.load();
 
-            // PostcontentController에 데이터 전달
+            // PostcontentController에 postId 전달
             PostcontentController controller = loader.getController();
-            controller.fetchPostFromDatabase(postId); // ID 전달
+            controller.fetchPostFromDatabase(postId);
 
             Stage stage = (Stage) btn_home.getScene().getWindow();
             stage.setScene(new Scene(screen));
@@ -198,5 +208,6 @@ public class CommunityController {
             e.printStackTrace();
         }
     }
+
 
 }

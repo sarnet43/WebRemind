@@ -93,24 +93,22 @@ public class PostcontentController {
         }
 
     public void fetchPostFromDatabase(int postId) {
-        String query = "SELECT title, content FROM posts WHERE id = ?";
+        String query = "SELECT * FROM posts WHERE id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setInt(1, postId); // 전달받은 ID 설정
+            pstmt.setInt(1, postId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // 결과에서 제목과 내용 가져오기
                     String title = rs.getString("title");
                     String content = rs.getString("content");
 
-                    // TextArea에 설정
+                    // 데이터 표시 (예: Label, TextArea 등)
                     titleArea.setText(title);
                     contentArea.setText(content);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
