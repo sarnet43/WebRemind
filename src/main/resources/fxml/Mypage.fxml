@@ -42,9 +42,9 @@
         <ImageView fx:id="userimage" fitHeight="200.0" fitWidth="200.0" layoutX="80.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
 
         <!-- 사용자 이미지 변경 버튼 -->
-        <Button layoutX="140.0" layoutY="340.0" mnemonicParsing="false" onAction="#userimageChangeButtonClick" text="이미지 변경" />
+        <Button fx:id="image_change" layoutX="140.0" layoutY="340.0" mnemonicParsing="false" onAction="#userimageChangeButtonClick" text="이미지 변경" />
 
-        <Text layoutX="20.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="마이페이지" wrappingWidth="120.0">
+        <Text fx:id="mypage_text" layoutX="20.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="마이페이지" wrappingWidth="120.0">
             <font>
                 <Font size="18.0" />
             </font>

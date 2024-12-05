@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -15,6 +17,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class PostcontentController {
     @FXML
@@ -31,9 +35,56 @@ public class PostcontentController {
     private TextArea contentArea; // 내용
     @FXML
     private ImageView userimage; // 유저의 이미지
+    @FXML
+    private TextArea answerArea;
+
+    private Font FONT; // 커스텀 폰트
 
     // 기본 이미지 URL
     private static final String DEFAULT_IMAGE_PATH = "/image/default image.jpg";
+
+    @FXML
+    private void initialize() {
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        titleArea.setFont(FONT);
+        contentArea.setFont(FONT);
+        answerArea.setFont(FONT);
+        btn_storage.setFont(Font.font(FONT.getFamily(), 14));
+
+        // 버튼 초기화 시 스타일 적용
+        btn_storage.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                btn_storage.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
+        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
+        titleArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                titleArea.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                contentArea.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        answerArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                answerArea.setFont(FONT);
+            }
+        });
+    }
 
         @FXML
         private void onalarm_poButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
@@ -92,6 +143,34 @@ public class PostcontentController {
             }
         }
 
+    @FXML
+    private void onstorage_poButtonClick() {            //알림 버튼을 클릭 시 호출되는 메서드
+
+        String user_name = answerArea.getText().trim(); // 닉네임을 가져옴
+
+        // 제목과 내용이 모두 비어있을 경우 경고 표시
+        if (answerArea.getText().trim().isEmpty()) {
+            showAlert("오류", "모두 입력해주세요.");
+            return;
+        }
+
+        try {
+            // 알림 화면 로드
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Community.fxml"));
+            Parent alarmScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+
+            // 현재 Stage 가져오기
+            Stage stage = (Stage) btn_storage.getScene().getWindow();      //알림 버튼을 누를 시 새로운 스테이지 생성
+
+            // 알림 화면으로 Scene 교체
+            Scene alarmScene = new Scene(alarmScreen);
+            stage.setScene(alarmScene);
+            // 알림 화면을 새로운 Scene으로 생성하고 Stage에 설정
+        } catch (IOException e) {                           // IOException 발생 시 예외 처리
+            e.printStackTrace();                            // 에러 메시지를 출력
+        }
+    }
+
     public void fetchPostFromDatabase(int postId) {
         String query = "SELECT * FROM posts WHERE id = ?";
 
@@ -116,5 +195,16 @@ public class PostcontentController {
         // 제목과 내용 필드를 읽기 전용으로 설정
         titleArea.setEditable(false);
         contentArea.setEditable(false);
+    }
+
+    // 경고창 표시 메서드
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        // 경고창에도 커스텀 폰트 적용
+        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
+        alert.showAndWait();
     }
 }

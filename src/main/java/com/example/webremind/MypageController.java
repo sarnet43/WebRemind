@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,17 +25,46 @@ public class MypageController {
     @FXML
     private javafx.scene.control.Button btn_mypage; // 마이페이지 버튼 id
     @FXML
-    private Button btn_namechange; // 닉네임 변경 버튼
+    private javafx.scene.control.Button image_change;   //이미지 변경 버튼 id
     @FXML
     private Text usernameText; // 닉네임을 표시하는 텍스트
     @FXML
+    private Text mypage_text;   //"마이페이지" 텍스트
+    @FXML
     private ImageView userimage; // 유저의 이미지
+
+    private Font FONT;
 
     // 기본 이미지 URL
     private static final String DEFAULT_IMAGE_PATH = "/image/default image.jpg";
 
     @FXML
     public void initialize() {
+
+        FONT = Font.loadFont(getClass().getResourceAsStream("/font/SB 어그로 B.ttf"), 16);
+        if (FONT == null) {
+            System.out.println("폰트 로드 실패: 기본 폰트를 사용합니다.");
+            FONT = Font.font("System", 16); // 기본 폰트로 대체
+        }
+
+        // 컴포넌트에 폰트 적용
+        mypage_text.setFont(FONT);
+        image_change.setFont(Font.font(FONT.getFamily(), 14));
+
+        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
+        mypage_text.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                mypage_text.setFont(FONT);
+            }
+        });
+
+        // 버튼 초기화 시 스타일 적용
+        image_change.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                image_change.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
         // 기본 이미지로 설정
         Image defaultImage = new Image(getClass().getResource(DEFAULT_IMAGE_PATH).toString());
         userimage.setImage(defaultImage);

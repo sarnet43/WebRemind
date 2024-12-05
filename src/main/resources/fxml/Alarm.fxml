@@ -3,10 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0"
-            stylesheets="@../css/alarm.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.webremind.AlarmController" style="-fx-background-color: White">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="360.0" style="-fx-background-color: White" stylesheets="@../css/alarm.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.webremind.AlarmController">
 
     <fx:define>
         <Image fx:id="Alarm" url="@../image/alarm.png" />
@@ -43,6 +42,6 @@
             </children>
         </VBox>
 
-        <Label layoutX="14.0" layoutY="24.0" styleClass="t" text="알림" />
+        <Text fx:id="alarm_text" layoutX="23.0" layoutY="45.0" styleClass="t" text="알림" />
     </children>
 </AnchorPane>

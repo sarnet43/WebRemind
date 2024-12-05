@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class CommunityController {
 
@@ -177,8 +179,6 @@ public class CommunityController {
         alert.showAndWait();
     }
 
-
-
     // ListView 아이템 더블 클릭 처리
     private void onListViewItemDoubleClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // 더블 클릭 감지
@@ -208,6 +208,4 @@ public class CommunityController {
             e.printStackTrace();
         }
     }
-
-
 }
