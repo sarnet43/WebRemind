@@ -141,15 +141,11 @@ public class PostcontentController {
 
     @FXML
     private void onstorage_poButtonClick() {
-        String comment = answerArea.getText().trim(); // 댓글 가져오기
-
-        if (comment.isEmpty()) {
-            showAlert("오류", "댓글을 입력해주세요.");
-            return;
-        }
+        String title = titleArea.getText().trim(); // 제목 가져오기
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")); // 현재 날짜 가져오기
 
         // 댓글 저장
-        DataStore.addComment(comment);
+        DataStore.addComment(title);
     }
 
     // 게시글 데이터를 설정하는 메서드

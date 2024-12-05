@@ -6,11 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AlarmController {
 
@@ -49,43 +51,36 @@ public class AlarmController {
 
         notificationList.getItems().setAll(DataStore.getComments());
 
-        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
-        notificationList.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                String selectedComment = notificationList.getSelectionModel().getSelectedItem();
-                switchToPostContent(selectedComment);
-            }
-        });
-
-        // 알림 리스트에 저장된 댓글 불러오기
-        notificationList.getItems().setAll(DataStore.getComments());
-
-        // 항목을 두 번 클릭 시 PostContent 화면으로 이동
-        notificationList.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                String selectedComment = notificationList.getSelectionModel().getSelectedItem();
-                if (selectedComment != null) {
-                    switchToPostContent(selectedComment);
-                }
-            }
-        });
-
+        // ListView 더블 클릭 이벤트 추가
+        notificationList.setOnMouseClicked(this::onListViewItemDoubleClick);
     }
 
-    // PostContent 화면으로 전환
-    private void switchToPostContent(String comment) {
+    // ListView 아이템 더블 클릭 처리
+    private void onListViewItemDoubleClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // 더블 클릭 감지
+            String selectedPost = notificationList.getSelectionModel().getSelectedItem();
+            if (selectedPost != null) {
+                // Postcontent.fxml로 이동하며 데이터 전달
+                switchToScene("/fxml/Postcontent.fxml", selectedPost);
+            }
+        }
+    }
+
+    // 화면 전환 메서드
+    private void switchToScene(String fxmlFile, String postContent) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Postcontent.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent screen = loader.load();
 
-            // PostcontentController로 선택된 댓글 전달
-            PostcontentController controller = loader.getController();
-            controller.loadComment(comment);
+            // PostcontentController에 데이터 전달
+            if (postContent != null) {
+                PostcontentController controller = loader.getController();
+                controller.setPostContent(postContent);
+            }
 
             Stage stage = (Stage) notificationList.getScene().getWindow();
             stage.setScene(new Scene(screen));
         } catch (IOException e) {
-            showAlert("오류", "화면을 불러올 수 없습니다.");
             e.printStackTrace();
         }
     }
@@ -156,5 +151,4 @@ public class AlarmController {
         alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
     }
-
 }
