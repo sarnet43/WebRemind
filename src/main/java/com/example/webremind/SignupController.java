@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class SingupController {
+public class SignupController {
 
     @FXML
     private TextField username; // 유저 닉네임

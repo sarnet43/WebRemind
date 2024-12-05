@@ -70,7 +70,6 @@ public class WritingController {
         }
     }
 
-    // WritingController.java
     private boolean savePostToDatabase(String title, String content, String date) {
         System.out.println("DB에 저장되는 사용자 이름: " + loggedInUserName);
         String query = "INSERT INTO posts (user_name, title, content, post_date) VALUES (?, ?, ?, ?)";
