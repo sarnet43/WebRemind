@@ -20,7 +20,6 @@
    </fx:define>
 
    <children>
-      <!-- 하단 메뉴 -->
       <HBox alignment="CENTER" layoutY="590.0" prefHeight="66.0" prefWidth="360.0" spacing="50.0" style=" -fx-background-color: White ">
          <children>
             <Button fx:id="btn_alarm" onAction="#onalarm_poButtonClick" style=" -fx-background-color: White ">
@@ -28,11 +27,13 @@
                   <ImageView image="$Alarm" />
                </graphic>
             </Button>
+
             <Button fx:id="btn_home" onAction="#onhome_poButtonClick" style=" -fx-background-color: White ">
                <graphic>
                   <ImageView image="$Home" />
                </graphic>
             </Button>
+
             <Button fx:id="btn_mypage" onAction="#onmypage_poButtonClick" style=" -fx-background-color: White ">
                <graphic>
                   <ImageView image="$Mypage" />

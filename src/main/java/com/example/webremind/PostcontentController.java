@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -18,21 +20,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class PostcontentController {
-
     @FXML
-    private javafx.scene.control.Button btn_alarm;
+    private javafx.scene.control.Button btn_alarm; // 알림 버튼 id
     @FXML
-    private javafx.scene.control.Button btn_home;
+    private javafx.scene.control.Button btn_home; // 홈 버튼 id
     @FXML
-    private javafx.scene.control.Button btn_mypage;
+    private javafx.scene.control.Button btn_mypage; // 마이페이지 버튼 id
     @FXML
-    private javafx.scene.control.Button btn_storage;
+    private javafx.scene.control.Button btn_storage; //저장 버튼 id
     @FXML
-    private TextArea titleArea;
+    private TextArea titleArea; // 제목 입력 필드
     @FXML
-    private TextArea contentArea;
+    private TextArea contentArea; // 내용
+    @FXML
+    private ImageView userimage; // 유저의 이미지
     @FXML
     private TextArea answerArea;
     @FXML
@@ -64,11 +68,39 @@ public class PostcontentController {
             FONT = Font.font("System", 16);
         }
 
+        // 컴포넌트에 폰트 적용
         titleArea.setFont(FONT);
         contentArea.setFont(FONT);
         answerArea.setFont(FONT);
+        btn_storage.setFont(Font.font(FONT.getFamily(), 14));
 
-        //loadComments(); // 댓글 목록 초기화
+        // 버튼 초기화 시 스타일 적용
+        btn_storage.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                btn_storage.setStyle("-fx-font-family: '" + FONT.getFamily() + "';");
+            }
+        });
+
+        // PasswordField에 포커스가 변경될 때마다 폰트 재적용
+        titleArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                titleArea.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                contentArea.setFont(FONT);
+            }
+        });
+
+        // TextField에 포커스가 변경될 때마다 폰트 재적용
+        contentArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) { // 포커스가 잡힐 때
+                contentArea.setFont(FONT);
+            }
+        });
     }
 
     @FXML
@@ -95,17 +127,24 @@ public class PostcontentController {
         }
     }
 
-    @FXML
-    private void onmypage_poButtonClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
-            Parent mypageScreen = loader.load();
-            Stage stage = (Stage) btn_mypage.getScene().getWindow();
-            stage.setScene(new Scene(mypageScreen));
-        } catch (IOException e) {
-            showAlert("오류", "마이페이지 화면을 로드할 수 없습니다.");
+        @FXML
+        private void onmypage_poButtonClick () {            //마이페이지 버튼을 클릭 시 호출되는 메서드
+            try {
+                // 마이페이지 화면 로드
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Mypage.fxml"));
+                Parent mypage_myScreen = loader.load();            // FXML 파일을 로드하여 Parent 변환
+
+                // 현재 Stage 가져오기
+                Stage stage = (Stage) btn_mypage.getScene().getWindow();      //마이페이지 버튼을 누를 시 새로운 스테이지 생성
+
+                // 마이페이지 화면으로 Scene 교체
+                Scene mypage_myScene = new Scene(mypage_myScreen);
+                stage.setScene(mypage_myScene);
+                // 마이페이지 화면을 새로운 Scene으로 생성하고 Stage에 설정
+            } catch (IOException e) {                           // IOException 발생 시 예외 처리
+                e.printStackTrace();                            // 에러 메시지를 출력
+            }
         }
-    }
 
     // 댓글 저장 및 화면에 추가
     @FXML
@@ -204,12 +243,18 @@ public class PostcontentController {
         loadComments();
     }
 
-
+    // 경고창 표시 메서드
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+        // 경고창에도 커스텀 폰트 적용
+        alert.getDialogPane().setStyle("-fx-font-family: '" + FONT.getFamily() + "'; -fx-font-size: 14px;");
         alert.showAndWait();
+    }
+
+    public void loadComment(String comment) {
+        contentArea.setText(comment);
     }
 }
